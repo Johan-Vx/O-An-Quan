@@ -1,8 +1,12 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, join_room
 from game_engine import GameEngine
-import random
+import random,os
 import string
+
+base_dir = os.path.abspath(os.path.dirname(__file__))
+template_dir = os.path.join(base_dir, '../templates')
+static_dir = os.path.join(base_dir, '../static')
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['SECRET_KEY'] = 'o-an-quan-secret'
