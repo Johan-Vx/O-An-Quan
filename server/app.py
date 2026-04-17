@@ -4,9 +4,12 @@ from game_engine import GameEngine
 import random
 import string
 
-app = Flask(__name__, template_folder='templates', static_folder='static')
+app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['SECRET_KEY'] = 'o-an-quan-secret'
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+# Lưu trữ state của các phòng
+active_rooms = {}
 
 # Lưu trữ state của các phòng
 active_rooms = {}
