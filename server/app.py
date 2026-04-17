@@ -1,19 +1,16 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, join_room
 from game_engine import GameEngine
-import random,os
-import string
+import random,string,os
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 template_dir = os.path.join(base_dir, '../templates')
 static_dir = os.path.join(base_dir, '../static')
 
-app = Flask(__name__, template_folder='../templates', static_folder='../static')
+app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 app.config['SECRET_KEY'] = 'o-an-quan-secret'
-socketio = SocketIO(app, cors_allowed_origins="*")
 
-# Lưu trữ state của các phòng
-active_rooms = {}
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Lưu trữ state của các phòng
 active_rooms = {}
@@ -57,12 +54,10 @@ def on_make_move(data):
     
     if room_id in active_rooms:
         game = active_rooms[room_id]
-        
         success = game.process_move(cell_index, direction)
         
         if success:
             emit('update_board', game.get_state(), room=room_id)
-            
             if game.mode == 'pve' and game.current_turn == 2:
                 socketio.sleep(1)
                 game.ai_make_move()
