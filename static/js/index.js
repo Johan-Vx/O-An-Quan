@@ -51,7 +51,6 @@ socket.on('update_board', (gameState) => {
     renderBoard(gameState);
 });
 
-// YÊU CẦU 2: LOAD ẢNH QUAN VÀ DÂN VÀO CÁC ELEMENT
 function renderBoard(gameState) {
     currentTurn = gameState.turn;
 
@@ -63,7 +62,7 @@ function renderBoard(gameState) {
 
     for (let i = 0; i < 12; i++) {
         const cellBtn = document.getElementById(`cell-${i}`);
-        cellBtn.innerHTML = ''; // Xóa sạch HTML cũ (reset ô)
+        cellBtn.innerHTML = '';
 
         const cellData = board[i];
 
@@ -110,3 +109,4 @@ function handleCell(index) {
         console.log("Không phải ô của bạn hoặc ô Quan!");
     }
 }
+
