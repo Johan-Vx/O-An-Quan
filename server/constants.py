@@ -136,4 +136,3 @@ INITIAL_BOARD_STATE = [5, 5, 5, 5, 5, 1, 5, 5, 5, 5, 5, 1]
 PLAYER1_CELLS = [6, 7, 8, 9, 10]
 PLAYER2_CELLS = [0, 1, 2, 3, 4]
 QUAN_CELLS = [5, 11]
-

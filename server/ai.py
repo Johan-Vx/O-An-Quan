@@ -25,7 +25,7 @@ class OAnQuanAI:
         configs = {
             'easy': (2, False),
             'medium': (4, True),
-            'hard': (6, True)
+            'hard': (5, True)
         }
         return configs.get(difficulty, (4, True))
     
