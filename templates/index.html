@@ -5,109 +5,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ô Ăn Quan - Web Edition</title>
-    <link rel="stylesheet" href="../static/css/game_style.css">
+    <link rel="stylesheet" href="/static/css/game_style.css">
 </head>
 
 <body>
     <div id="game-wrapper">
-        <!-- MENU CHÍNH -->
-        <div id="menu-screen" class="screen active" style="background-image: url('../static/images/menu.png');">
-            <button id="btn-pvp" class="hitbox" onclick="showScreen('pvp-options-screen', 'menu-screen')"></button>
-            <button id="btn-pve" class="hitbox" onclick="showScreen('choose-screen', 'menu-screen')"></button>
-            <button id="btn-exit-menu" class="hitbox" onclick="handleExitApp()"></button>
+
+        <div id="menu-screen" class="screen active" style="background-image: url('/static/images/menu.png');">
+            <button id="btn-pvp" class="hitbox" onclick="showScreen('pvp-options-screen','menu-screen')"></button>
+            <button id="btn-pve" class="hitbox" onclick="showScreen('choose-screen','menu-screen')"></button>
         </div>
 
-        <!-- TÙY CHỌN PVP -->
-        <div id="pvp-options-screen" class="screen" style="background-image: url('../static/images/option_pvp.png')">
+        <div id="pvp-options-screen" class="screen" style="background-image: url('/static/images/option_pvp.png');">
             <button id="btn-pvp-back" class="hitbox" onclick="goBack()"></button>
             <button id="btn-create-room" class="hitbox"
-                onclick="showScreen('create-room-screen', 'pvp-options-screen')"></button>
+                onclick="showScreen('create-room-screen','pvp-options-screen')"></button>
             <button id="btn-join-room" class="hitbox"
-                onclick="showScreen('join-room-screen', 'pvp-options-screen')"></button>
-            <button id="btn-practice" class="hitbox" onclick="showScreen('game-screen', 'pvp-options-screen')"></button>
+                onclick="showScreen('join-room-screen','pvp-options-screen')"></button>
+            <button id="btn-practice" class="hitbox" onclick="startPractice()"></button>
         </div>
 
-        <!-- TẠO PHÒNG -->
         <div id="create-room-screen" class="screen"
-            style="background-image: url('../static/images/btn_joinroom_option_cr.png');">
-            <input type="text" id="create-room-input" class="room-input room-input-box" placeholder="NHẬP TÊN PHÒNG">
+            style="background-image: url('/static/images/btn_joinroom_option_cr.png');">
+            <input type="text" id="create-room-input" class="room-input room-input-box" placeholder="NHẬP TÊN PHÒNG"
+                maxlength="12">
             <button id="btn-action-create" class="hitbox btn-action-main" onclick="handleCreateRoomAction()"></button>
             <button id="btn-action-create-random" class="hitbox btn-action-random"
                 onclick="handleCreateRandom()"></button>
             <button id="btn-action-create-cancel" class="hitbox btn-action-cancel" onclick="goBack()"></button>
         </div>
 
-        <!-- THAM GIA PHÒNG -->
         <div id="join-room-screen" class="screen"
-            style="background-image: url('../static/images/btn_joinroom_option_rd.png');">
-            <input type="text" id="join-room-input" class="room-input room-input-box" placeholder="NHẬP MÃ PHÒNG">
+            style="background-image: url('/static/images/btn_joinroom_option_rd.png');">
+            <input type="text" id="join-room-input" class="room-input room-input-box" placeholder="NHẬP MÃ PHÒNG"
+                maxlength="12">
             <button id="btn-action-join" class="hitbox btn-action-main" onclick="handleJoinRoomAction()"></button>
             <button id="btn-action-join-random" class="hitbox btn-action-random" onclick="handleJoinRandom()"></button>
             <button id="btn-action-join-cancel" class="hitbox btn-action-cancel" onclick="goBack()"></button>
         </div>
 
-        <!-- CHỌN ĐỘ KHÓ -->
-        <div id="choose-screen" class="screen" style="background-image: url('../static/images/choose.png');">
+        <div id="choose-screen" class="screen" style="background-image: url('/static/images/choose.png');">
             <button id="btn-back-choose" class="hitbox" onclick="goBack()"></button>
             <button id="btn-easy" class="hitbox" onclick="startGame('easy')"></button>
             <button id="btn-medium" class="hitbox" onclick="startGame('medium')"></button>
             <button id="btn-hard" class="hitbox" onclick="startGame('hard')"></button>
         </div>
 
-        <!-- MÀN HÌNH GAME -->
-        <div id="game-screen" class="screen" style="background-image: url('../static/images/ingame_bg.png');">
-            <button id="btn-undo" class="hitbox" onclick="handleUndo()"></button>
-            <button id="btn-exit-game" class="hitbox" onclick="goBack()"></button>
+        <!-- Game screen: background đặt mặc định ingame_bg_p1, JS thay cho P2 -->
+        <div id="game-screen" class="screen" style="background-image: url('/static/images/ingame_bg_p1.png');">
 
-            <div id="score-p1" class="score-display" style="top: 620px; left: 710px;">0</div>
-            <div id="score-p2" class="score-display" style="top: 200px; left: 710px;">0</div>
+            <button id="btn-undo" class="hitbox" onclick="handleUndo()" style="visibility:hidden;"></button>
+            <button id="btn-exit-game" class="hitbox" onclick="handleExitGame()"></button>
+
+            <div id="score-p1" class="score-display" style="top:620px; left:710px;">0</div>
+            <div id="score-p2" class="score-display" style="top:200px; left:710px;">0</div>
+
+            <div id="room-code-display" class="room-code-display" style="display:none;"></div>
+            <div id="turn-indicator" class="turn-indicator" style="display:none;"></div>
 
             <div id="game-board">
-                <!-- Các ô dân Player 2 (0-4) -->
-                <button class="hitbox cell-btn" style="top: 325px; left: 400px;" onmouseenter="hoverCell(0)"
-                    onclick="selectCell(0)" id="cell-0"></button>
-                <button class="hitbox cell-btn" style="top: 325px; left: 516px;" onmouseenter="hoverCell(1)"
-                    onclick="selectCell(1)" id="cell-1"></button>
-                <button class="hitbox cell-btn" style="top: 325px; left: 635px;" onmouseenter="hoverCell(2)"
-                    onclick="selectCell(2)" id="cell-2"></button>
-                <button class="hitbox cell-btn" style="top: 325px; left: 755px;" onmouseenter="hoverCell(3)"
-                    onclick="selectCell(3)" id="cell-3"></button>
-                <button class="hitbox cell-btn" style="top: 325px; left: 870px;" onmouseenter="hoverCell(4)"
-                    onclick="selectCell(4)" id="cell-4"></button>
+                <!-- Ô dân P2 (hàng trên mặc định, 0-4) -->
+                <canvas class="hitbox cell-btn" style="top:325px; left:400px;" id="cell-0" width="90" height="90"
+                    onclick="selectCell(0)"></canvas>
+                <canvas class="hitbox cell-btn" style="top:325px; left:516px;" id="cell-1" width="90" height="90"
+                    onclick="selectCell(1)"></canvas>
+                <canvas class="hitbox cell-btn" style="top:325px; left:635px;" id="cell-2" width="90" height="90"
+                    onclick="selectCell(2)"></canvas>
+                <canvas class="hitbox cell-btn" style="top:325px; left:755px;" id="cell-3" width="90" height="90"
+                    onclick="selectCell(3)"></canvas>
+                <canvas class="hitbox cell-btn" style="top:325px; left:870px;" id="cell-4" width="90" height="90"
+                    onclick="selectCell(4)"></canvas>
 
-                <!-- Ô Quan Phải (5) -->
-                <button class="hitbox cell-btn cell-quan" style="top: 395px; left: 988px;" disabled
-                    id="cell-5"></button>
+                <!-- Ô Quan Phải (5) – cố định, không di chuyển -->
+                <canvas class="hitbox cell-btn cell-quan" style="top:395px; left:988px;" id="cell-5" width="100"
+                    height="160"></canvas>
 
-                <!-- Các ô dân Player 1 (6-10) -->
-                <button class="hitbox cell-btn" style="top: 465px; left: 400px;" onmouseenter="hoverCell(6)"
-                    onclick="selectCell(6)" id="cell-6"></button>
-                <button class="hitbox cell-btn" style="top: 465px; left: 516px;" onmouseenter="hoverCell(7)"
-                    onclick="selectCell(7)" id="cell-7"></button>
-                <button class="hitbox cell-btn" style="top: 465px; left: 635px;" onmouseenter="hoverCell(8)"
-                    onclick="selectCell(8)" id="cell-8"></button>
-                <button class="hitbox cell-btn" style="top: 465px; left: 755px;" onmouseenter="hoverCell(9)"
-                    onclick="selectCell(9)" id="cell-9"></button>
-                <button class="hitbox cell-btn" style="top: 465px; left: 870px;" onmouseenter="hoverCell(10)"
-                    onclick="selectCell(10)" id="cell-10"></button>
+                <!-- Ô dân P1 (hàng dưới mặc định, 6-10) -->
+                <canvas class="hitbox cell-btn" style="top:465px; left:870px;" id="cell-6" width="90" height="90"
+                    onclick="selectCell(6)"></canvas>
+                <canvas class="hitbox cell-btn" style="top:465px; left:755px;" id="cell-7" width="90" height="90"
+                    onclick="selectCell(7)"></canvas>
+                <canvas class="hitbox cell-btn" style="top:465px; left:635px;" id="cell-8" width="90" height="90"
+                    onclick="selectCell(8)"></canvas>
+                <canvas class="hitbox cell-btn" style="top:465px; left:516px;" id="cell-9" width="90" height="90"
+                    onclick="selectCell(9)"></canvas>
+                <canvas class="hitbox cell-btn" style="top:465px; left:400px;" id="cell-10" width="90" height="90"
+                    onclick="selectCell(10)"></canvas>
 
-                <!-- Ô Quan Trái (11) -->
-                <button class="hitbox cell-btn cell-quan" style="top: 395px; left: 284px;" disabled
-                    id="cell-11"></button>
+                <!-- Ô Quan Trái (11) – cố định, không di chuyển -->
+                <canvas class="hitbox cell-btn cell-quan" style="top:395px; left:284px;" id="cell-11" width="100"
+                    height="160"></canvas>
 
-                <!-- LỚP ANIMATION (BÀN TAY & MŨI TÊN) -->
-                <div id="arrow-left" class="direction-arrow" style="background-image: url('../static/images/left.png');"
+                <div id="arrow-left" class="direction-arrow" style="background-image:url('/static/images/left.png');"
                     onclick="confirmMove('left')"></div>
-                <div id="arrow-right" class="direction-arrow"
-                    style="background-image: url('../static/images/right.png');" onclick="confirmMove('right')"></div>
-                <div id="hand-cursor" class="hand-base"></div>
+                <div id="arrow-right" class="direction-arrow" style="background-image:url('/static/images/right.png');"
+                    onclick="confirmMove('right')"></div>
+
+                <div id="hand-cursor" class="hand-base"
+                    style="background-image:url('/static/images/h0.png'); display:none;"></div>
+            </div>
+
+            <canvas id="capture-p2" width="280" height="150"></canvas>
+            <canvas id="capture-p1" width="260" height="150"></canvas>
+
+            <div id="win-screen" class="win-overlay" style="display:none;">
+                <img id="win-image" src="" alt="Kết quả">
             </div>
         </div>
+
+        <!-- Modal dùng chung (inject động từ JS) -->
+        <div id="exit-modal" class="modal-overlay">
+            <div class="modal-content">
+                <h2 id="modal-title">Thông báo</h2>
+                <p id="modal-message"></p>
+                <div class="modal-buttons" id="modal-buttons"></div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Import thư viện SocketIO từ CDN -->
+    <!-- SocketIO phải load TRƯỚC index.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
-    <script src="../static/js/index.js"></script>
+    <script src="/static/js/index.js"></script>
 </body>
 
 </html>
